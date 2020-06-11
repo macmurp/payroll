@@ -11,50 +11,58 @@ namespace payroll
     }
     public abstract class Employee
     {
-        public abstract string Firstname { get; set; }
-        public abstract string Lastname { get; set; }
-        public abstract int Age { get; set; }
-        public abstract int EmployeeID { get; set; }
-        public Employee(string Firstname, string Lastname, int Age, int EmployeeID)
+        private string Firstname { get; set; }
+        private string Lastname { get; set; }
+        private int Age { get; set; }
+        private int EmployeeID { get; set; }
+        protected decimal CalculatedPay { get; set; }
+        protected Employee(string Firstname, string Lastname, int Age, int EmployeeID)
         {
             this.Firstname = Firstname;
             this.Lastname = Lastname;
             this.Age = Age;
             this.EmployeeID = EmployeeID;
-        }
-        public string Nameoutput()
-        {
-            string Nameoutput = Lastname + ", " + Firstname;
-            return Nameoutput;
-        }
-        public string Ageoutput()
-        {
-            string Ageoutput = Age + " years old";
-            return Ageoutput;
 
         }
-        public string IDoutput()
+        public string NameOutput()
         {
-            string IDoutput = "ID " + EmployeeID;
-            return IDoutput;
+            return Lastname + ", " + Firstname;
+        }
+        public int AgeOutput()
+        {
+            return Age;
+        }
+        public int IDOutput()
+        {
+            return EmployeeID;
+        }
+        public string CalculatePay()
+        {
+            return "$" + CalculatedPay;
         }
     }
     public class SalariedEmployee : Employee
     {
-        public decimal Monthlypay { get; set; }
-        public override string Firstname { get; set; }
-        public override string Lastname { get; set; }
-        public override int Age { get; set; }
-        public override int EmployeeID { get; set; }
+        private decimal Monthlypay { get; set; }
 
         public SalariedEmployee(string Firstname, string Lastname, int Age, int EmployeeID, decimal Monthlypay)
             : base(Firstname, Lastname, Age, EmployeeID)
         {
-            this.Firstname = Firstname;
-            this.Lastname = Lastname;
-            this.Age = Age;
-            this.EmployeeID = EmployeeID;
             this.Monthlypay = Monthlypay;
+            CalculatedPay = Monthlypay;
+        }
+    }
+    public class HourlyEmployee : Employee
+    {
+        private decimal Hourlypay { get; set; }
+        private decimal Hoursworked { get; set; }
+
+        public HourlyEmployee(string Firstname, string Lastname, int Age, int EmployeeID, decimal Hourlypay, decimal Hoursworked)
+            : base(Firstname, Lastname, Age, EmployeeID)
+        {
+            this.Hourlypay = Hourlypay;
+            this.Hoursworked = Hoursworked;
+            CalculatedPay = Hoursworked * Hourlypay;
         }
     }
 }
