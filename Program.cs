@@ -65,12 +65,36 @@ namespace payroll
                         Employees.Add(new HourlyEmployee(tempfirst, templast, tempage, tempid, temphourly, temphours));
                         break;
                     case 3:
-                        foreach(Employee s in Employees)
+                        decimal total = 0M;
+                        decimal salariedtotal = 0M;
+                        decimal hourlytotal = 0M;
+                        foreach (Employee s in Employees)
                         {
                             Console.WriteLine(s.NameOutput() + " | " + s.IDOutput() + " | " + s.AgeOutput() + " | " + s.CalculatePay() + "\n");
-
+                            total += s.CalculatedPay;
+                            if(s is SalariedEmployee)
+                            {
+                                salariedtotal += s.CalculatedPay;
+                            } else
+                            {
+                                hourlytotal += s.CalculatedPay;
+                            }
                         }
-                        Console.WriteLine("Total payout here");
+                        Console.Write("Total gross payout $" + total);
+                        Console.Write(" | Net paid: $" + decimal.Round(total - (total * .265M) - (total * .0765M), 2));
+                        Console.Write(" | FICA paid: $" + decimal.Round((total * .0765M), 2));
+                        Console.WriteLine(" | Fed Inc Tax paid: $" + decimal.Round((total * .265M), 2) + "\n");
+
+                        Console.Write("Total hourly payout: $" + hourlytotal);
+                        Console.Write(" | Net paid: $" + decimal.Round(hourlytotal - (hourlytotal * .265M) - (hourlytotal * .0765M), 2));
+                        Console.Write(" | FICA paid: $" + decimal.Round((hourlytotal * .0765M), 2));
+                        Console.WriteLine(" | Fed Inc Tax paid: $" + decimal.Round((hourlytotal * .265M), 2) + "\n");
+
+                        Console.Write("Total salaried payout: $" + salariedtotal);
+                        Console.Write(" | Net paid: $" + decimal.Round(salariedtotal - (salariedtotal * .265M) - (salariedtotal * .0765M), 2));
+                        Console.Write(" | FICA paid: $" + decimal.Round((salariedtotal * .0765M), 2));
+                        Console.WriteLine(" | Fed Inc Tax paid: $" + decimal.Round((salariedtotal * .265M), 2));
+
                         break;
                 }
             }
@@ -82,7 +106,7 @@ namespace payroll
         private string Lastname { get; set; }
         private int Age { get; set; }
         private int EmployeeID { get; set; }
-        protected decimal CalculatedPay { get; set; }
+        public decimal CalculatedPay { get; set; }
         protected Employee(string Firstname, string Lastname, int Age, int EmployeeID)
         {
             this.Firstname = Firstname;
