@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace payroll
 {
@@ -6,7 +7,73 @@ namespace payroll
     {
         static void Main(string[] args)
         {
-            
+            int input = 0;
+            List<Employee> Employees = new List<Employee>();
+            while (input != 3)
+            {
+                Console.WriteLine("Choose from the following options:\n");
+                Console.WriteLine("1.Add a salaried employee");
+                Console.WriteLine("2.Add an hourly employee");
+                Console.WriteLine("3.Generate report");
+                //input = Convert.ToInt32(Console.ReadLine());
+                if(!int.TryParse(Console.ReadLine(), out input))
+                { Console.WriteLine("Please enter a valid option."); continue; }
+                switch (input)
+                {
+                    case 1:
+                        string tempfirst;
+                        string templast;
+                        int tempage;
+                        int tempid;
+                        decimal tempsalary;
+                        Console.WriteLine("Enter the following details:");
+                        Console.WriteLine("First name");
+                        tempfirst = Console.ReadLine();
+                        Console.WriteLine("Last name");
+                        templast = Console.ReadLine();
+                        Console.WriteLine("Age");
+                        if(!int.TryParse(Console.ReadLine(), out tempage))
+                        { Console.WriteLine("Please enter a valid option."); continue; }
+                        Console.WriteLine("Employee ID");
+                        if (!int.TryParse(Console.ReadLine(), out tempid))
+                        { Console.WriteLine("Please enter a valid option."); continue; }
+                        Console.WriteLine("Monthly salary");
+                        if (!decimal.TryParse(Console.ReadLine(), out tempsalary))
+                        { Console.WriteLine("Please enter a valid option."); continue; }
+                        Employees.Add(new SalariedEmployee(tempfirst, templast, tempage, tempid, tempsalary));
+                        break;
+                    case 2:
+                        decimal temphourly;
+                        decimal temphours;
+                        Console.WriteLine("Enter the following details:");
+                        Console.WriteLine("First name");
+                        tempfirst = Console.ReadLine();
+                        Console.WriteLine("Last name");
+                        templast = Console.ReadLine();
+                        Console.WriteLine("Age");
+                        if (!int.TryParse(Console.ReadLine(), out tempage))
+                        { Console.WriteLine("Please enter a valid option."); continue; }
+                        Console.WriteLine("Employee ID");
+                        if (!int.TryParse(Console.ReadLine(), out tempid))
+                        { Console.WriteLine("Please enter a valid option."); continue; }
+                        Console.WriteLine("Hourly pay");
+                        if (!decimal.TryParse(Console.ReadLine(), out temphourly))
+                        { Console.WriteLine("Please enter a valid option."); continue; }
+                        Console.WriteLine("Hours worked");
+                        if (!decimal.TryParse(Console.ReadLine(), out temphours))
+                        { Console.WriteLine("Please enter a valid option."); continue; }
+                        Employees.Add(new HourlyEmployee(tempfirst, templast, tempage, tempid, temphourly, temphours));
+                        break;
+                    case 3:
+                        foreach(Employee s in Employees)
+                        {
+                            Console.WriteLine(s.NameOutput() + " | " + s.IDOutput() + " | " + s.AgeOutput() + " | " + s.CalculatePay() + "\n");
+
+                        }
+                        Console.WriteLine("Total payout here");
+                        break;
+                }
+            }
         }
     }
     public abstract class Employee
@@ -22,23 +89,22 @@ namespace payroll
             this.Lastname = Lastname;
             this.Age = Age;
             this.EmployeeID = EmployeeID;
-
         }
         public string NameOutput()
         {
-            return Lastname + ", " + Firstname;
+            return "Name: " + Lastname + ", " + Firstname;
         }
-        public int AgeOutput()
+        public string AgeOutput()
         {
-            return Age;
+            return "Age: " + Age;
         }
-        public int IDOutput()
+        public string IDOutput()
         {
-            return EmployeeID;
+            return "Employee ID: " + EmployeeID;
         }
         public string CalculatePay()
         {
-            return "$" + CalculatedPay;
+            return "Pay: $" + CalculatedPay;
         }
     }
     public class SalariedEmployee : Employee
