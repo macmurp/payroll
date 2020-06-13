@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace payroll
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static int Main(string[] args)
         {
             int input = 0;
             List<Employee> Employees = new List<Employee>();
@@ -15,9 +15,10 @@ namespace payroll
                 Console.WriteLine("1.Add a salaried employee");
                 Console.WriteLine("2.Add an hourly employee");
                 Console.WriteLine("3.Generate report");
-                //input = Convert.ToInt32(Console.ReadLine());
-                if(!int.TryParse(Console.ReadLine(), out input))
-                { Console.WriteLine("Please enter a valid option."); continue; }
+                //input = UserInput(Console.ReadLine());
+                input = UserInput.IntInput(Console.ReadLine());
+                //if(!int.TryParse(Console.ReadLine(), out input))
+                //{ Console.WriteLine("Please enter a valid option."); continue; }
                 switch (input)
                 {
                     case 1:
@@ -38,8 +39,12 @@ namespace payroll
                         if (!int.TryParse(Console.ReadLine(), out tempid))
                         { Console.WriteLine("Please enter a valid option."); continue; }
                         Console.WriteLine("Monthly salary");
-                        if (!decimal.TryParse(Console.ReadLine(), out tempsalary))
-                        { Console.WriteLine("Please enter a valid option."); continue; }
+                        //if (!decimal.TryParse(Console.ReadLine(), out tempsalary))
+                        //{ Console.WriteLine("Please enter a valid option."); continue; }
+                        tempsalary = UserInput.DecInput(Console.ReadLine());
+                        if (tempsalary == 0)
+                        { continue; }
+                            
                         Employees.Add(new SalariedEmployee(tempfirst, templast, tempage, tempid, tempsalary));
                         break;
                     case 2:
@@ -98,6 +103,30 @@ namespace payroll
                         break;
                 }
             }
+            return 0;
+        }
+    }
+    public static class UserInput
+    {
+        static int input;
+        static decimal decimalinput;
+        public static int IntInput(string i)
+        {
+            if (!int.TryParse(i, out input))
+            {
+                Console.WriteLine("Please enter a valid option."); return 0;
+            }
+            else
+                return input;
+        }
+        public static decimal DecInput(string i)
+        {
+            if (!decimal.TryParse(i, out decimalinput))
+            {
+                Console.WriteLine("Please enter a valid option."); return 0;
+            }
+            else
+                return decimalinput;
         }
     }
     public abstract class Employee
@@ -155,4 +184,6 @@ namespace payroll
             CalculatedPay = Hoursworked * Hourlypay;
         }
     }
+
+    
 }
